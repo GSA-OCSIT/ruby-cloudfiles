@@ -42,7 +42,7 @@ module CloudFiles
     def container_metadata
       @metadata ||= (
         begin
-          response = SwiftClient.head_container(self.connection.storageurl, self.connection.authtoken, escaped_name)
+          response = SwiftClient.head_container(self.connection.storageurl, self.connection.authtoken, name)
           resphash = {}
           response.to_hash.select { |k,v| k.match(/^x-container-meta/) }.each { |x| resphash[x[0]] = x[1].to_s }
           {:bytes => response["x-container-bytes-used"].to_i, :count => response["x-container-object-count"].to_i, :metadata => resphash, :container_read => response["x-container-read"], :container_write => response["x-container-write"]}
