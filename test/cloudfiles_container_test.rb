@@ -445,9 +445,13 @@ class CloudfilesContainerTest < Test::Unit::TestCase
     SwiftClient.stubs(:head_container).returns({'x-container-bytes-used' => '0','x-container-object-count' => '0'})
     @container = CloudFiles::Container.new(connection, "test_container")    
     SwiftClient.stubs(:head_container).raises(ClientException.new("test_cdn_metadata_fails", :http_status => 404))    
-    assert_raise(CloudFiles::Exception::NoSuchContainer) do
-      @container.cdn_metadata
-    end
+    cdn_metadata = @container.cdn_metadata
+    assert_equal cdn_metadata, { :cdn_enabled => false,
+                                  :cdn_ttl => nil,
+                                  :cdn_url => nil,
+                                  :cdn_ssl_url => nil,
+                                  :cdn_streaming_url => nil,
+                                  :cdn_log => false }
   end
   
   def test_cdn_metadata_no_cdn
