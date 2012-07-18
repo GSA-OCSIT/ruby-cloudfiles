@@ -221,14 +221,6 @@ module CloudFiles
       # If we're taking data from standard input, send that IO object to cfreq
       data = $stdin if (data.nil? && $stdin.tty? == false)
       begin
-        puts self.container.connection.storageurl
-        puts self.container.connection.authtoken
-        puts self.container.escaped_name
-        puts self.container.name
-        puts escaped_name
-        puts name
-        puts data
-        puts headers.inspect
         response = SwiftClient.put_object(self.container.connection.storageurl, self.container.connection.authtoken, self.container.name, escaped_name, data, nil, nil, nil, nil, headers)
       rescue ClientException => e
         code = e.status.to_s
